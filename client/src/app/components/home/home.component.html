@@ -1,0 +1,60 @@
+<div class="container-fluid">
+  <div class="row mb-2">
+    <div class="col">
+      <label for="order-select">Order : </label>
+      <select
+        id="order-select"
+        class="form-select ml-2"
+        [(ngModel)]="order"
+        (change)="getArticles(order)"
+      >
+        <option value="0"></option>
+        <option value="up_votes-1">Up Votes DESC </option>
+        <option value="up_votes-0">Up Votes ASC </option>
+        <option value="down_votes-1">Down Votes DESC </option>
+        <option value="down_votes-0">Down Votes ASC </option>
+      </select>
+    </div>
+  </div>
+  <div class="row card-group">
+    <ng-container *ngFor="let article of articles">
+      <div class="col-xl-4 col-md-6">
+        <div class="card m-1">
+          <div class="card-body">
+            <h5 class="card-title">Title : {{ article.title }}</h5>
+            <p class="card-text article-content">
+              Content Preview : {{ article.content }}
+            </p>
+            <p class="card-text article-content">
+              Author : {{ article.author }}
+            </p>
+          </div>
+
+          <div class="card-footer">
+            <div class="d-flex justify-content-between">
+              <div class="col">
+                <a
+                  class="btn btn-success"
+                  [routerLink]="'article/' + article._id"
+                  >Continue reading</a
+                >
+              </div>
+              <div class="col text-right">
+                <button class="btn btn-light ml-2">
+                  <i class="bi bi-hand-thumbs-up-fill text-success" (click)="voteArticle(article._id,'up_votes')">
+                    {{ article.up_votes }}
+                  </i>
+                </button>
+                <button class="btn btn-light ml-2">
+                  <i class="bi bi-hand-thumbs-down-fill text-danger" (click)="voteArticle(article._id,'down_votes')">
+                    {{ article.down_votes }}
+                  </i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

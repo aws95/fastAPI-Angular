@@ -1,0 +1,82 @@
+<div class="container">
+  <div class="card m-1">
+    <form
+      [formGroup]="articleCreationForm"
+      (ngSubmit)="onSubmit(articleCreationForm)"
+      class="needs-validation"
+      novalidate
+    >
+      <div class="card-body">
+        <div class="form-group">
+          <label for="validationCustom01">Article Title</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="title"
+            placeholder="Enter title"
+            id="validationCustom01"
+            required
+          />
+          <span class="text-danger"
+            *ngIf="
+              (articleCreationFormControl.title.touched || submitted) &&
+              articleCreationFormControl.title.errors?.required
+            "
+            
+          >
+            Please provide a valid title.
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="validationCustom02">Article Author</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="author"
+            placeholder="Enter Author"
+            id="validationCustom02"
+            required
+          />
+          <span class="text-danger"
+            *ngIf="
+              (articleCreationFormControl.author.touched || submitted) &&
+              articleCreationFormControl.author.errors?.required
+            "
+            
+          >
+            Please provide a valid author.
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="validationCustom03">Article Content</label>
+          <textarea
+            class="form-control"
+            formControlName="content"
+            placeholder="Enter Content"
+            id="validationCustom03"
+            required
+          ></textarea>
+
+          <span class="text-danger"
+            *ngIf="
+              (articleCreationFormControl.content.touched || submitted) &&
+              articleCreationFormControl.content.errors?.required
+            "
+            
+          >
+            Please provide a valid article content.
+          </span>
+        </div>
+      </div>
+      <div class="card-footer d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="message.status === 200" class="alert alert-success" role="alert">
+    {{ message!.message }}
+  </div>
+  <div *ngIf="message.status === 400" class="alert alert-danger" role="alert">
+    {{ message!.message }}
+  </div>
+</div>
