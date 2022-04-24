@@ -31,8 +31,8 @@ export class CreateArticleComponent implements OnInit {
     this.articleCreationForm =
       this.fb.group({
         title: ['', Validators.required],
-        author: ['', [Validators.required]],
-        content: ['', [Validators.required]],
+        author: ['', Validators.required],
+        content: ['', Validators.required],
       }
       );
   }
@@ -43,28 +43,31 @@ export class CreateArticleComponent implements OnInit {
 
   onSubmit(form: FormGroup) {
     this.submitted = true
-    this.httpService
-      .createArticle({ ...form.value, up_votes: 0, down_votes: 0 })
-      .subscribe((articleResp: IArticle) => {
+    if (this.articleCreationForm.valid) {
+      this.httpService
+        .createArticle({ ...form.value, up_votes: 0, down_votes: 0 })
+        .subscribe((articleResp: IArticle) => {
 
-        if (articleResp._id && this.articleCreationForm.valid) {
-          this.message = {
-            status: 200,
-            message: "Article created with success, you will be redirected to home..."
+          if (articleResp._id) {
+            this.message = {
+              status: 200,
+              message: "Article created with success, you will be redirected to home..."
+            }
           }
-        }
-        if (!articleResp._id && this.articleCreationForm.valid) {
-          this.message = {
-            status: 400,
-            message: "Something went wrong, your article wasn't created with success, you will be redirected to home..."
+          if (!articleResp._id) {
+            this.message = {
+              status: 400,
+              message: "Something went wrong, your article wasn't created with success, you will be redirected to home..."
+            }
           }
-        }
+          
+          setTimeout(() => {
+            this.router.navigate(['/']);
+          }, 3000);
 
-        setTimeout(() => {
-          this.router.navigate(['/']);
-        }, 3000);
+        });
+    }
 
-      });
   }
 
   ngOnDestroy(): void {

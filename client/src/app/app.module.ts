@@ -7,18 +7,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HomeComponent } from './components/home/home.component';
-import { SearchComponent } from './components/search/search.component';
 import { ArticleComponent } from './components/article/article.component';
 import { CreateArticleComponent } from './components/create-article/create-article.component';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    SearchComponent,
     ArticleComponent,
-    CreateArticleComponent
+    CreateArticleComponent,
+    NavBarComponent,
   ],
   imports: [
     BrowserModule,

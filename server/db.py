@@ -1,7 +1,7 @@
 import motor.motor_asyncio
 from bson.objectid import ObjectId
 from model import Article
-from pymongo import DESCENDING, ASCENDING
+from pymongo import DESCENDING, ASCENDING, TEXT
 
 client = motor.motor_asyncio.AsyncIOMotorClient('mongodb://localhost:27017/')
 database = client.Articles
@@ -9,7 +9,7 @@ collection = database.articles
 
 
 async def fetch_article(_id):
-    document = await collection.find_one({"_id":ObjectId(_id)})
+    document = await collection.find_one({"_id": ObjectId(_id)})
     return document
 
 
@@ -17,8 +17,10 @@ async def fetch_all_articles(order,
                              type,
                              search=""):
     aticles = []
+    searchQuery = {"$text": {"$search": f"\"{search}\""}
+                   } if search != "" else {}
     cursor = collection.find(
-        {}, sort=[(order, DESCENDING if type == "1" else ASCENDING)])
+        searchQuery, sort=[(order, DESCENDING if type == "1" else ASCENDING)])
     async for document in cursor:
         aticles.append(Article(**document))
     return aticles
@@ -37,7 +39,7 @@ async def vote(_id, attr):
     return document
 
 
-async def polutate_db():
+async def populate_db():
     await collection.drop()
     articles = [
 
@@ -85,5 +87,7 @@ async def polutate_db():
         }
 
     ]
+    await collection.create_index([("content", TEXT),
+                                  ("title", TEXT), ("author", TEXT)])
     await collection.insert_many(articles)
     return {"msg": "ok"}

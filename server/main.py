@@ -7,7 +7,7 @@ from db import (
     fetch_all_articles,
     create_article,
     vote,
-    polutate_db
+    populate_db
 )
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -34,7 +34,7 @@ async def root():
 
 @app.get("/api/v1/article/populate")
 async def populate():
-    response = await polutate_db()
+    response = await populate_db()
     if response:
         return response
     raise HTTPException(400, "couldn't populate database")

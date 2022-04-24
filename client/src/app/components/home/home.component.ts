@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { APIResponse, IArticle } from 'src/app/interfaces';
 import { HttpService } from 'src/app/services/http.service';
+import { MessageService } from 'src/app/services/message.service';
 
 @Component({
   selector: 'app-home',
@@ -15,16 +17,24 @@ export class HomeComponent implements OnInit, OnDestroy {
   public articles!: Array<IArticle>;
   private routeSub!: Subscription;
   private articleSub!: Subscription;
+  private searchSub!: Subscription;
   private voteSub!: Subscription;
 
 
   constructor(
     private httpService: HttpService,
+    private messageService: MessageService,
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+
+    this.messageService.getMessage().subscribe(data => {
+      if (data) {
+        this.articles = data
+      }
+    });
     this.routeSub = this.activatedRoute.params.subscribe((params: Params) => {
       if (params['search']) {
         this.getArticles('up_votes-1', params['search']);
@@ -84,6 +94,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     if (this.voteSub) {
       this.voteSub.unsubscribe();
+    }
+
+    if (this.searchSub) {
+      this.searchSub.unsubscribe();
     }
 
     if (this.routeSub) {
